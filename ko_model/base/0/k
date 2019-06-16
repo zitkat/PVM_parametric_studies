@@ -1,0 +1,79 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  4.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      k;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// Re = 10000: --> I = 0.16*Re**(-1/8) = 0.05
+// k = (3/2)*(U_ref * I)**2 = 0.00375
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 0.00375;
+
+boundaryField
+{
+    inletBoundary_patch0
+    {
+        type            fixedValue;
+        value           uniform 0.00375;
+    }
+    outletBoundary_patch2
+    {
+        type            zeroGradient;
+        // type            kqRWallFunction;
+        // value           uniform 0.00375;
+    }
+
+    fixedWalltop_patch1
+    {
+        // aproximace rustu rychlosti pres prvni bunky u steny
+        type            kqRWallFunction;    //corresponds to zeroGradient
+        //value           uniform 0.00375;
+    }
+    fixedWallbot_patch1
+    {
+        type            kqRWallFunction;   //corresponds to zeroGradient
+        //value           uniform 0.00375;
+    }
+
+    cyc_halftop_patch2
+    {
+        type            cyclicAMI;
+    }
+    cyc_halfbot_patch2
+    {
+        type            cyclicAMI;
+    }
+
+    cyc_halftop_patch0
+    {
+        type            cyclicAMI;
+    }
+    cyc_halfbot_patch0
+    {
+        type            cyclicAMI;
+    }
+
+    front
+    {
+        type            empty;
+    }
+    back
+    {
+        type            empty;
+    }
+}
+
+
+// ************************************************************************* //

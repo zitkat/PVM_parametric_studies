@@ -1,0 +1,83 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createPatchDict;
+}
+
+pointSync false;
+
+patches
+(
+  // {
+  //   name fixedWalltop_patch1new;
+  //
+  //   patchInfo
+  //   {
+  //     type patch;
+  //   }
+  //   constructFrom patches;
+  //   patches (auto9 auto10 auto11 auto13 auto16 auto18 auto19 fixedWalltop_patch1);
+  // }
+  // {
+  //   name fixedWallbot_patch1new;
+  //
+  //   patchInfo
+  //   {
+  //     type patch;
+  //   }
+  //   constructFrom patches;
+  //   patches (auto8 auto12 auto14 auto15 auto17 fixedWallbot_patch1);
+  //   }
+
+    {
+    name cyc_halftop_patch0;
+        patchInfo
+        {
+            type cyclic;
+            neighbourPatch cyc_halfbot_patch0;
+        }
+        constructFrom patches;
+        patches (periodicBoundarytop_patch0);
+    }
+    {
+    name cyc_halfbot_patch0;
+      patchInfo
+      {
+          type cyclic;
+          neighbourPatch cyc_halftop_patch0;
+      }
+      constructFrom patches;
+      patches (periodicBoundarybot_patch0);
+    }
+
+
+    {
+    name cyc_halftop_patch2;
+        patchInfo
+        {
+            type cyclicAMI;
+            neighbourPatch cyc_halfbot_patch2;
+        }
+        constructFrom patches;
+        patches (periodicBoundarytop_patch2);
+    }
+    {
+    name cyc_halfbot_patch2;
+      patchInfo
+      {
+          type cyclicAMI;
+          neighbourPatch cyc_halftop_patch2;
+      }
+      constructFrom patches;
+      patches (periodicBoundarybot_patch2);
+    }
+);

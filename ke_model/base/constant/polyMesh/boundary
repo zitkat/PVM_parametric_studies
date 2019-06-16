@@ -1,0 +1,116 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       polyBoundaryMesh;
+    location    "0.0005/polyMesh";
+    object      boundary;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+10
+(
+    inletBoundary_patch0
+    {
+        type            patch;
+        physicalType    patch;
+        nFaces          40;
+        startFace       9440;
+    }
+    outletBoundary_patch2
+    {
+        type            patch;
+        physicalType    patch;
+        nFaces          40;
+        startFace       9480;
+    }
+
+    front
+    {
+        type            empty;
+        nFaces          4800;
+        startFace       9520;
+    }
+    back
+    {
+        type            empty;
+        nFaces          4800;
+        startFace       14320;
+    }
+
+    fixedWalltop_patch1
+    {
+        type            wall;
+        physicalType    wall;
+        nFaces          40;
+        startFace       19120;
+    }
+    fixedWallbot_patch1
+    {
+        type            wall;
+        physicalType    wall;
+        nFaces          40;
+        startFace       19160;
+    }
+
+    cyc_halftop_patch0
+    {
+        type            cyclicAMI;
+        inGroups        1(cyclicAMI);
+        nFaces          40;
+        startFace       19200;
+        matchTolerance  0.001;
+        transform       translational;
+        neighbourPatch  cyc_halfbot_patch0;
+        separationVector (0 -0.5309291584566751 0);
+        method          faceAreaWeightAMI;
+    }
+    cyc_halfbot_patch0
+    {
+        type            cyclicAMI;
+        inGroups        1(cyclicAMI);
+        nFaces          40;
+        startFace       19240;
+        matchTolerance  0.001;
+        transform       translational;
+        neighbourPatch  cyc_halftop_patch0;
+        separationVector (0 0.5309291584566751 0);
+        method          faceAreaWeightAMI;
+    }
+    cyc_halftop_patch2
+    {
+        type            cyclicAMI;
+        inGroups        1(cyclicAMI);
+        nFaces          40;
+        startFace       19280;
+        matchTolerance  0.0001;
+        transform       translational;
+        separationVector (0 -0.5309291584566751 0);
+        neighbourPatch  cyc_halfbot_patch2;
+        method          faceAreaWeightAMI;
+    }
+    cyc_halfbot_patch2
+    {
+        type            cyclicAMI;
+        inGroups        1(cyclicAMI);
+        nFaces          40;
+        startFace       19320;
+        matchTolerance  0.0001;
+        transform       translational;
+        separationVector (0 0.5309291584566751 0);
+        neighbourPatch  cyc_halftop_patch2;
+        method          faceAreaWeightAMI;
+    }
+
+
+
+)
+
+// ************************************************************************* //
