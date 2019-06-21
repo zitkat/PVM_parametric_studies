@@ -7,6 +7,7 @@ import subprocess as sub
 from PyFoam.Execution.AnalyzedRunner import AnalyzedRunner
 from PyFoam.Execution.BasicRunner import BasicRunner
 from PyFoam.Execution.UtilityRunner import UtilityRunner
+from PyFoam.RunDictionary.ParameterFile import ParameterFile
 
 from PyFoam.RunDictionary.SolutionDirectory import SolutionDirectory
 from PyFoam.RunDictionary.ParsedParameterFile import ParsedParameterFile
@@ -14,27 +15,38 @@ from PyFoam.Basics.DataStructures import Vector
 
 from load_surface_data import load_raw_postdata
 
-
-
 solver = "pisoFoam"
-base_case = "base_nowf"
+base_case = "base"
 
 templateCase = SolutionDirectory(base_case, archive=None, paraviewLink=False)
 
 
 epsilons = nm.linspace(0, 3, 13)
-epsilons.tofile("epsilons.txt", sep=";")
-
+nus = nm.ones(epsilons.shape) * 1e-6
 for i, eps in enumerate(epsilons):
-    case = templateCase.cloneCase("testCase_nowf" + str(i))
+    case = templateCase.cloneCase("testCase" + str(i))
 
     epsilonBC = ParsedParameterFile(path.join(case.name, "0", "epsilon"))
     epsilonBC["boundaryField"]["fixedWalltop_patch1"]["value"].setUniform(eps)
     epsilonBC["boundaryField"]["fixedWallbot_patch1"]["value"].setUniform(eps)
     epsilonBC.writeFile()
-    # sub.run([solver, "-case", case.name])
+    epsilonBC.closeFile()
+
     run = BasicRunner(argv=[solver, "-case", case.name], silent=False)
     run.start()
+
+    if max(case.times) < .30:
+        case.clear()
+        case.clearResults()
+        trans = ParameterFile(path.join(case.name, "constant/transportProperties"))
+        trans.readFile()
+        trans.replaceParameter("nu", "[0 2 -1 0 0 0 0]  1e-5")
+        trans.writeFile()
+        trans.closeFile()
+        nus[i] = 1e-5
+        run = BasicRunner(argv=[solver, "-case", case.name], silent=False)
+        run.start()
+
     post = UtilityRunner("postProcess -func surfaces".split(" ") + ['-case', case.name])
     post.start()
 
@@ -45,6 +57,11 @@ for i, eps in enumerate(epsilons):
     ax.plot(range(len(p_top)), p_top, label="top")
 
     fig.savefig(pjoin(path.basename(case.name), "p_top_bot_129.png"))
+
+epsilons.tofile("epsilons.txt", sep=";")
+nus.tofile("nus.txt", sep=";")
+
+
 
 
 
