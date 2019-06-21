@@ -39,11 +39,11 @@ def load_raw_postdata(case_folder, time, filepath_form=None):
         p_tops.append(p_top)
         p_bots.append(p_bot)
 
-    return nm.array(p_tops), nm.array(p_bots), nm.array(times)
+    return nm.array(p_tops), nm.array(p_bots), nm.array(times, dtype=nm.float)
 
 
 def load_cases(folder, case_name_regexp, time):
-    case_folders = glob(pjoin(folder, case_name_regexp))
+    case_folders = sorted(glob(pjoin(folder, case_name_regexp)))
     case_datas_top = []
     case_datas_bot = []
     ctimes = []
@@ -58,7 +58,7 @@ def load_cases(folder, case_name_regexp, time):
 
 
 if __name__ == '__main__':
-    p_top, p_bot, times = load_cases(".", "*[Cc]ase_inlet*", "last")  # "*[Cc]ase_nowf[1-9]**"
+    p_top, p_bot, times, nums = load_cases(".", "*[Cc]ase*", "last")  # "*[Cc]ase_nowf[1-9]**"
     epsilons = nm.fromfile("epsilons.txt", sep=";")
 
     n_cases = len(p_top)
