@@ -11,39 +11,51 @@ FoamFile
     format      ascii;
     class       dictionary;
     location    "system";
-    object      controlDict;
+    object      fvSolution;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// volba SLAR řešiče
+solvers
+{
+    p
+    {
+        solver          GAMG;
+        tolerance       1e-06;
+        relTol          0.01;
+        smoother        GaussSeidel;
 
-application     pisoFoam;
+        // TODO what does this do?
+        // PreSweeps      0;
+        // nPostSweeps     2;
+        // cacheAgglomeration on;
+        // agglomerator    faceAreaPair;
+        // nCellsInCoarsestLevel 10;
+        // mergeLevels     1;
+    }
 
-startFrom       startTime;
+    pFinal
+    {
+        $p;
+        tolerance       1e-06;
+        relTol          0;
+    }
 
-startTime       0;
+    "(U|k|epsilon|omega|R|nuTilda)"
+    {
+        solver          smoothSolver;
+        smoother        GaussSeidel;
+        tolerance       1e-05;
+        relTol          0;
+    }
+}
 
-stopAt          endTime;
-
-endTime         0.3;
-
-deltaT          1e-5
-
-writeControl    timeStep;
-
-writeInterval   600;
-
-purgeWrite      0;
-
-writeFormat     ascii;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
+PISO
+{
+    nCorrectors     2;
+    nNonOrthogonalCorrectors 0;
+    pRefCell        0;
+    pRefValue       0;
+}
 
 
 // ************************************************************************* //

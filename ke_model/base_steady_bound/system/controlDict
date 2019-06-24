@@ -15,7 +15,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     pisoFoam;
+application     simpleFoam;
 
 startFrom       startTime;
 
@@ -23,13 +23,13 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         0.3;
+endTime         1000;
 
-deltaT          1e-5
+deltaT          1;
 
 writeControl    timeStep;
 
-writeInterval   600;
+writeInterval   100;
 
 purgeWrite      0;
 
@@ -37,7 +37,7 @@ writeFormat     ascii;
 
 writePrecision  6;
 
-writeCompression off;
+writeCompression uncompressed;
 
 timeFormat      general;
 

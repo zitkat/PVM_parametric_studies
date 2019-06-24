@@ -24,10 +24,14 @@ template_case = SolutionDirectory(base_case_name, archive=None, paraviewLink=Fal
 epsilons = nm.linspace(0, 3, 13)
 nus = nm.ones(epsilons.shape) * 1e-6
 for i, eps in enumerate(epsilons):
-    case = template_case.cloneCase("testCase{:02}".format(i))
+    if i < 2:
+        continue
+    case = template_case.cloneCase("walls/testCase{:02}".format(i))
 
     epsilonBC = ParsedParameterFile(path.join(case.name, "0", "epsilon"))
-    epsilonBC["boundaryField"]["inletBoundary_patch0"]["value"].setUniform(eps)
+    # epsilonBC["boundaryField"]["inletBoundary_patch0"]["value"].setUniform(eps)
+    epsilonBC["boundaryField"]["fixedWalltop_patch1"]["value"].setUniform(eps)
+    epsilonBC["boundaryField"]["fixedWallbot_patch1"]["value"].setUniform(eps)
     epsilonBC.writeFile()
     # epsilonBC.closeFile()
 
@@ -59,13 +63,7 @@ for i, eps in enumerate(epsilons):
     ax.plot(range(len(p_top)), p_bot, label="bot")
     ax.plot(range(len(p_top)), p_top, label="top")
 
-    fig.savefig(pjoin(path.basename(case.name), "p_top_bot_129.png"))
+    fig.savefig(pjoin(case.name, "p_top_bot_last.png"))
 
 epsilons.tofile("epsilons.txt", sep=";")
 nus.tofile("nus.txt", sep=";")
-
-
-
-
-
-

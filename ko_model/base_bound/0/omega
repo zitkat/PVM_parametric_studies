@@ -11,40 +11,37 @@ FoamFile
     format      ascii;
     class       volScalarField;
     location    "0";
-    object      epsilon;
+    object      omega;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-// epsilon = (0.164 * k**1.5)/ (0.07 L) -->
-// epsilon = (0.164 * 0.00375**1.5) / (0.07 * 1) = 5.38e-4
-//ep = 5.38e-4;
 
-dimensions      [0 2 -3 0 0 0 0];
+dimensions      [0 0 -1 0 0 0 0];
 
-internalField   uniform 0.1; //0.00754;
+internalField   uniform 22.4;
 
 boundaryField
 {
     inletBoundary_patch0
     {
         type            fixedValue;
-        value           uniform 0.1; //0.00754;
+        value           uniform 22.4;
     }
     outletBoundary_patch2
     {
         type            zeroGradient;
+        value           uniform 22.4;
     }
+
 
     fixedWalltop_patch1
     {
-        // type            fixedValue;
-        type            epsilonWallFunction;
-        value           uniform 0.1;
+        type            omegaWallFunction; // corresponds to fixedValue
+        value           uniform 22.4;  // required
     }
     fixedWallbot_patch1
     {
-        // type            fixedValue;
-        type            epsilonWallFunction;
-        value           uniform 0.1;
+        type            omegaWallFunction; // corresponds to fixedValue
+        value           uniform 22.4; // required
     }
 
     cyc_halftop_patch2

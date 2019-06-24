@@ -1,0 +1,145 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  4.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile  {
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system"
+    object      sampleDict;
+}
+surfaces{
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+    /* Sample field data with a choice of interpolation schemes, sampling options
+       and write formats. After running the sample application the user will find
+       a new folder in the case directory named sets.
+
+       One can use "foamCalc" to calculate the components of a tensor/vector and
+       then you can you sample to sample these components. For example: If I have
+       the stress tensor sigma, then I type:
+         foamCalc components sigma
+
+       This will create the volScalarFields sigmaxx,sigmayy,sigmazz,sigmaxy,sigmaxz
+       and sigmayz. Then use 'sample' utility on these fields.                  */
+
+    // Set output format : choice are xmgr, jplot, gnuplot, raw, vtk, ensight, csv.
+    // Each data file is given a name containing the field name, the sample set name,
+    // and an extension relating to the output format, including .xy for raw data,
+    // .agr for Grace/xmgr and .dat for jPlot.
+    setFormat raw;
+
+    // Surface output format. Choice of
+    //      null        : suppress output
+    //      ensight     : Ensight Gold format, one field per case file
+    //      foamFile    : separate points, faces and values file
+    //      dx          : DX scalar or vector format
+    //      vtk         : VTK ascii format
+    //      raw         : x y z value format for use with e.g. gnuplot 'splot'.
+    //
+    // Note:
+    // other formats such as obj, stl, etc can also be written (by proxy)
+    // but without any values!
+    surfaceFormat raw;
+
+    // optionally define extra controls for the output formats
+    formatOptions {
+        ensight     {
+            format  ascii;
+        }
+    }
+
+    // interpolationScheme. choice of
+    //      cell          : use cell-centre value only; constant over cells
+    //                      (default)
+    //      cellPoint     : use cell-centre and vertex values
+    //      cellPointFace : use cell-centre, vertex and face values.
+    //      pointMVC      : use point values only (Mean Value Coordinates)
+    //      cellPatchConstrained : like 'cell' but uses cell-centre except on
+    //                             boundary faces where it uses the boundary value.
+    //                             For use with e.g. patchCloudSet.
+    // 1] vertex values determined from neighbouring cell-centre values
+    // 2] face values determined using the current face interpolation scheme
+    //    for the field (linear, gamma, etc.)
+    interpolationScheme cell;
+
+    // Fields to sample.
+    fields ( p );
+    type surfaces;
+    libs ("libsampling.so");
+
+
+    // Surface sampling definition
+    //
+    // 1] patches are not triangulated by default
+    // 2] planes are always triangulated
+    // 3] iso-surfaces are always triangulated
+    surfaces
+    (
+
+        topwall_constant    {
+            type            patch;
+            patches         ( ".*Walltop.*" );
+        }
+
+        topwall_interpolated    {
+            type            patch;
+            patches         ( ".*Walltop.*" );
+            interpolate     true;
+        }
+
+        botwall_constant    {
+            type            patch;
+            patches         ( ".*Wallbot.*" );
+        }
+
+        botwall_interpolated    {
+            type            patch;
+            patches         ( ".*Wallbot.*" );
+            interpolate     true;
+        }
+
+        neartopWall_interpolated    {
+            // Sample cell values off patch. Does not need to be the near-wall
+            // cell, can be arbitrarily far away.
+            type            patchInternalField;
+            patches         ( ".*Walltop.*" );
+            interpolate     true;
+
+
+            // Optional: specify how to obtain sampling points from the patch
+            //           face centres (default is 'normal')
+            //
+            //  //- Specify distance to offset in normal direction
+            offsetMode  normal;
+            distance    0.01;
+            //
+            //  //- Specify single uniform offset
+            //  offsetMode  uniform;
+            //  offset      (0 0 0.0001);
+        }
+        nearbotWall_interpolated    {
+            // Sample cell values off patch. Does not need to be the near-wall
+            // cell, can be arbitrarily far away.
+            type            patchInternalField;
+            patches         ( ".*Wallbot.*" );
+            interpolate     true;
+
+
+            // Optional: specify how to obtain sampling points from the patch
+            //           face centres (default is 'normal')
+            //
+            //  //- Specify distance to offset in normal direction
+            offsetMode  normal;
+            distance    0.01;
+            //
+            //  //- Specify single uniform offset
+            //  offsetMode  uniform;
+            //  offset      (0 0 0.0001);
+        }
+    );
+}
+// *********************************************************************** //

@@ -17,6 +17,7 @@ def load_raw_postdata(case_folder, time, filepath_form=None):
 
     if time in ["all", "last"]:
         times = (os.path.basename(t) for t in glob(pjoin(case_folder, postproc_path, "*")))
+        print(glob(pjoin(case_folder, postproc_path, "*")))
         times = sorted(list(times))
         if time == "last":
             times = [times[-1]]

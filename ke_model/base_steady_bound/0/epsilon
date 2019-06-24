@@ -36,15 +36,13 @@ boundaryField
 
     fixedWalltop_patch1
     {
-        // type            fixedValue;
-        type            epsilonWallFunction;
-        value           uniform 0.1;
+        type            epsilonWallFunction;    // corresponds to fixedValue
+        value           uniform 0.1; //0.00754; // required
     }
     fixedWallbot_patch1
     {
-        // type            fixedValue;
-        type            epsilonWallFunction;
-        value           uniform 0.1;
+        type            epsilonWallFunction;    // corresponds to fixedValue
+        value           uniform 0.1; //0.00754; // required
     }
 
     cyc_halftop_patch2

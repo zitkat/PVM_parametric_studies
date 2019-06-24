@@ -15,35 +15,16 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     pisoFoam;
+extrudeModel    linearDirection;
 
-startFrom       startTime;
+patchType   empty;
 
-startTime       0;
+nLayers 1;
 
-stopAt          endTime;
+direction   (0 0 1);
+thickness   0.1;
 
-endTime         0.3;
 
-deltaT          1e-5
-
-writeControl    timeStep;
-
-writeInterval   600;
-
-purgeWrite      0;
-
-writeFormat     ascii;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
 
 
 // ************************************************************************* //

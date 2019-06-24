@@ -10,40 +10,20 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    location    "system";
-    object      controlDict;
+    location    "constant";
+    object      turbulenceProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     pisoFoam;
+simulationType  RAS;
 
-startFrom       startTime;
+RAS
+{
+    RASModel        kOmega; // ruzne modely
 
-startTime       0;
+    turbulence      on;
 
-stopAt          endTime;
-
-endTime         0.3;
-
-deltaT          1e-5
-
-writeControl    timeStep;
-
-writeInterval   600;
-
-purgeWrite      0;
-
-writeFormat     ascii;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
-
+    printCoeffs     on;
+}
 
 // ************************************************************************* //

@@ -194,5 +194,9 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
-ke_model/*[Cc]ase*
+#ke_model/walls/*[Cc]ase*
+#ke_model/inlet/*[Cc]ase*
+**/*[Cc]ase*
+**/0.*
+
 ko_model/*[Cc]ase*

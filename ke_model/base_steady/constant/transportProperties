@@ -7,43 +7,33 @@
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
-    version     2.0;
-    format      ascii;
-    class       dictionary;
-    location    "system";
-    object      controlDict;
+version     2.0;
+format      ascii;
+class       dictionary;
+location    "constant";
+object      transportProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     pisoFoam;
+transportModel  Newtonian;
 
-startFrom       startTime;
+nu              [0 2 -1 0 0 0 0] 1e-06; // kinematická vyskozita
 
-startTime       0;
 
-stopAt          endTime;
-
-endTime         0.3;
-
-deltaT          1e-5
-
-writeControl    timeStep;
-
-writeInterval   600;
-
-purgeWrite      0;
-
-writeFormat     ascii;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
-
+// CrossPowerLawCoeffs
+// {
+//     nu0             nu0 [ 0 2 -1 0 0 0 0 ] 1e-06;
+//     nuInf           nuInf [ 0 2 -1 0 0 0 0 ] 1e-06;
+//     m               m [ 0 0 1 0 0 0 0 ] 1;
+//     n               n [ 0 0 0 0 0 0 0 ] 1;
+// }
+//
+// BirdCarreauCoeffs
+// {
+//     nu0             nu0 [ 0 2 -1 0 0 0 0 ] 1e-06;
+//     nuInf           nuInf [ 0 2 -1 0 0 0 0 ] 1e-06;
+//     k               k [ 0 0 1 0 0 0 0 ] 0;
+//     n               n [ 0 0 0 0 0 0 0 ] 1;
+// }
 
 // ************************************************************************* //

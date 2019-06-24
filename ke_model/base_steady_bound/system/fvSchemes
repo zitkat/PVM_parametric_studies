@@ -11,39 +11,46 @@ FoamFile
     format      ascii;
     class       dictionary;
     location    "system";
-    object      controlDict;
+    object      fvSchemes;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     pisoFoam;
+ddtSchemes
+{
+    default         steadyState;
+}
 
-startFrom       startTime;
+gradSchemes
+{
+    default         Gauss linear;
+}
 
-startTime       0;
+divSchemes
+{
+    default         none;
+    div(phi,U)       Gauss limitedLinearV 1;
+    div(phi,k)       Gauss limitedLinear 1;
+    div(phi,epsilon)  Gauss limitedLinear 1;
+    div(phi,R)       Gauss limitedLinear 1;
+    div(R)          Gauss linear;
+    div(phi,nuTilda) Gauss limitedLinear 1;
+    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+}
 
-stopAt          endTime;
+laplacianSchemes
+{
+    default         Gauss linear corrected;
+}
 
-endTime         0.3;
+interpolationSchemes
+{
+    default         linear;
+}
 
-deltaT          1e-5
-
-writeControl    timeStep;
-
-writeInterval   600;
-
-purgeWrite      0;
-
-writeFormat     ascii;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
+snGradSchemes
+{
+    default         corrected;
+}
 
 
 // ************************************************************************* //
